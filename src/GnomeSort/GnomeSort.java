@@ -9,22 +9,19 @@ public class GnomeSort {
         int i = 1;
         int j = 2;
         List<SortState> stats = new ArrayList<>();
-        stats.add(new SortState(arr, i, j));
         while (i < arr.length) {
             if (arr[i - 1] < arr[i]) {
                 i = j;
                 j++;
-                stats.add(new SortState(arr, i, j));
             } else {
                 int temp = arr[i - 1];
                 arr[i - 1] = arr[i];
                 arr[i] = temp;
+                stats.add(new SortState(i - 1, i));
                 i--;
-                stats.add(new SortState(arr, i, j));
                 if (i == 0) {
                     i = j;
                     j++;
-                    stats.add(new SortState(arr, i, j));
                 }
             }
         }

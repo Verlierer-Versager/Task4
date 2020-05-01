@@ -5,6 +5,8 @@ import ru.vsu.cs.util.JTableUtils;
 import ru.vsu.cs.util.SwingUtils;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -17,39 +19,16 @@ public class Form extends JFrame {
     private JButton executeButton;
     private JButton backButton;
     private JButton nextButton;
-    private JTable table2;
-    private JLabel ivalue1;
-    private JLabel jvalue1;
-    private JLabel ivalue2;
-    private JLabel jvalue2;
     private JButton randomButton;
-    private List<SortState> stats = new ArrayList<>();
+    private JButton runAllButton;
     private int[] arr;
-    private GnomeSort gnomeSort = new GnomeSort();
-    private String ivalue = new String("Значение i: ");
-    private String jvalue = new String("Значение j: ");
+    Player player;
     private int i = 0;
-
-    private void changeStats() {
-        if (i < stats.size() - 1) {
-            ivalue1.setText(ivalue + stats.get(i).getI());
-            jvalue1.setText(jvalue + stats.get(i).getJ());
-            ivalue2.setText(ivalue + stats.get(i + 1).getI());
-            jvalue2.setText(jvalue + stats.get(i + 1).getJ());
-            JTableUtils.writeArrayToJTable(table1, stats.get(i).getArr());
-            JTableUtils.writeArrayToJTable(table2, stats.get(i + 1).getArr());
-        } else {
-            SwingUtils.showInfoMessageBox("Массив отсортирован");
-        }
-    }
 
     private void restart() {
         try {
             arr = JTableUtils.readIntArrayFromJTable(table1);
-            stats = new ArrayList<>();
-            stats = gnomeSort.sort(arr);
-            i = 0;
-            changeStats();
+            player = new Player(arr, table1);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -61,28 +40,29 @@ public class Form extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
 
-        JTableUtils.initJTableForArray(table1, 40, true, true, true, true);
-        JTableUtils.initJTableForArray(table2, 40, true, true, true, true);
+        JTableUtils.initJTableForArray(table1, 80, true, true, false, true);
         table1.setRowHeight(25);
-        table2.setRowHeight(25);
-
 
         executeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (stats.size() == 0) {
-                    try {
-                        int[] arr = JTableUtils.readIntArrayFromJTable(table1);
-                        stats = gnomeSort.sort(arr);
-                        JTableUtils.writeArrayToJTable(table2, stats.get(1).getArr());
-                        changeStats();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    } catch (IndexOutOfBoundsException e) {
-                        SwingUtils.showInfoMessageBox("Массив состоит из одного числа");
-                    }
-                } else {
-                    restart();
+                try {
+                    player = new Player(JTableUtils.readIntArrayFromJTable(table1), table1);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (IndexOutOfBoundsException e) {
+                    SwingUtils.showInfoMessageBox("Массив состоит из одного числа");
+                }
+            }
+        });
+
+        runAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    player.runProcess();
+                } catch (NullPointerException e) {
+                    SwingUtils.showInfoMessageBox("Нажмите кнопку >Выполнить<, чтобы начать работу");
                 }
             }
         });
@@ -90,21 +70,25 @@ public class Form extends JFrame {
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                i++;
-                changeStats();
+                try {
+                    player.iteration(true);
+                } catch (NullPointerException e) {
+                    SwingUtils.showInfoMessageBox("Нажмите кнопку >Выполнить<, чтобы начать работу");
+                } catch (Exception e) {
+                    SwingUtils.showErrorMessageBox(e);
+                }
             }
         });
 
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (i != 0) {
-                    i--;
-                    changeStats();
-                }
-                if (i >= stats.size() - 1) {
-                    i = stats.size() - 2;
-                    changeStats();
+                try {
+                    player.iteration(false);
+                } catch (NullPointerException e) {
+                    SwingUtils.showInfoMessageBox("Нажмите кнопку >Выполнить<, чтобы начать работу");
+                } catch (Exception e) {
+                    SwingUtils.showErrorMessageBox(e);
                 }
             }
         });
