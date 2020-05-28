@@ -5,10 +5,12 @@ import java.util.List;
 
 public class GnomeSort {
 
-    public List<SortState> sort(int[] arr) {
+    public List<SortState> sort(int[] array) {
         int i = 1;
         int j = 2;
+        int[] arr = new int[array.length];
         List<SortState> stats = new ArrayList<>();
+        System.arraycopy(array, 0, arr, 0, arr.length);
         while (i < arr.length) {
             if (arr[i - 1] < arr[i]) {
                 i = j;

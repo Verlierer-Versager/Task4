@@ -28,7 +28,7 @@ public class Form extends JFrame {
     private void restart() {
         try {
             arr = JTableUtils.readIntArrayFromJTable(table1);
-            player = new Player(arr, table1);
+            player = new Player(arr, new GnomeSort().sort(arr), table1);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -47,7 +47,8 @@ public class Form extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    player = new Player(JTableUtils.readIntArrayFromJTable(table1), table1);
+                    arr=JTableUtils.readIntArrayFromJTable(table1);
+                    player = new Player(arr, new GnomeSort().sort(arr), table1);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 } catch (IndexOutOfBoundsException e) {

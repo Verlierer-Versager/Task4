@@ -15,10 +15,9 @@ public class Player {
     private List<SortState> states = new ArrayList<>();
     JTable table;
 
-    public Player(int[] arr, JTable table) {
-        this.arr = new int[arr.length];
-        System.arraycopy(arr, 0, this.arr, 0, arr.length);
-        this.states = new GnomeSort().sort(arr);
+    public Player(int[] arr,List<SortState> states,  JTable table) {
+        this.arr = arr;
+        this.states = states;
         this.table = table;
     }
 
@@ -30,8 +29,8 @@ public class Player {
         return states;
     }
 
-    private void select(int j, boolean flag) {
-        if (flag) {
+    private void select(int j, boolean toSelect) {
+        if (toSelect) {
             String str = "8" + Math.abs(arr[j]) + "8";
             int a = Integer.parseInt(str);
             if (arr[j] < 0) {
@@ -52,8 +51,8 @@ public class Player {
         }
     }
 
-    public void iteration(boolean flag) throws Exception {
-        if (flag) {
+    public void iteration(boolean toNextStep) throws Exception {
+        if (toNextStep) {
             if (i != states.size()) {
                 index = i + 1;
                 timer.start();
