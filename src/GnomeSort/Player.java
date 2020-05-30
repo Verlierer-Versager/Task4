@@ -15,7 +15,7 @@ public class Player {
     private List<SortState> states = new ArrayList<>();
     JTable table;
 
-    public Player(int[] arr,List<SortState> states,  JTable table) {
+    public Player(int[] arr, List<SortState> states, JTable table) {
         this.arr = arr;
         this.states = states;
         this.table = table;

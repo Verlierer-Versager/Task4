@@ -47,7 +47,7 @@ public class Form extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    arr=JTableUtils.readIntArrayFromJTable(table1);
+                    arr = JTableUtils.readIntArrayFromJTable(table1);
                     player = new Player(arr, new GnomeSort().sort(arr), table1);
                 } catch (ParseException e) {
                     e.printStackTrace();
